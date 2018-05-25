@@ -1,0 +1,492 @@
+回顾:
+1.方法的重载(Overload):
+  1)发生在同一个类中，方法名称相同，参数列表不同
+  2)编译器在编译时会根据方法的签名自动绑定方法
+2.构造方法:构造函数、构造器、构建器
+  1)给成员变量赋初值
+  2)与类同名，没有返回值类型
+  3)创建对象时被自动调用
+  4)若自己不写，则默认无参构造，若自己写了，则不再默认提供了
+  5)可以重载
+3.this:指代当前对象，哪个对象调方法它指的就是哪个对象
+       只能用在方法中，访问成员变量之前默认有个this.
+  this的用法:
+    1)this.成员变量名----------访问成员变量
+	2)this.方法名()------------调用方法
+	3)this()-------------------调用构造方法
+
+
+笔记:
+1.引用类型数组:
+  1)Cell[] cells = new Cell[4];
+    cells[0] = new Cell(2,5);
+	cells[1] = new Cell(2,6);
+	cells[2] = new Cell(2,7);
+	cells[3] = new Cell(3,6);
+  2)Cell[] cells = new Cell[]{
+      new Cell(2,5),
+	  new Cell(2,6),
+	  new Cell(2,7),
+	  new Cell(3,6)
+    };
+  3)int[][] arr = new int[3][];
+    arr[0] = new int[2];
+	arr[1] = new int[3];
+	arr[2] = new int[2];
+    arr[1][0] = 100; //给arr中第2个元素中的第1个元素赋值为100
+  4)int[][] arr = new int[3][4];
+    for(int i=0;i<arr.length;i++){
+	  for(int j=0;j<arr[i].length;j++){
+	    arr[i][j] = 100;
+	  }
+	}
+2.继承:
+  1)作用:实现代码的复用
+  2)通过extends来实现继承
+  3)父类:所有子类所共有的属性和行为
+    子类:子类所特有的属性和行为
+  4)子类继承父类后，子类具有:子类+父类
+  5)一个父类可以有多个子类，
+    一个子类只能继承一个父类----单一继承
+  6)继承具有传递性
+  7)java规定:构造子类之前必须先构造父类
+    在子类构造中若自己不调用父类的构造，则默认super()调父类的无参构造
+	若在子类构造中调用了父类的构造，则不再默认提供
+	super()调用父类构造方法，必须位于子类构造的第一行
+3.super:指代当前对象的父类对象
+  super的用法:
+    1)super.成员变量名----------访问父类的成员变量
+	2)super.方法名()------------调用父类的方法
+	3)super()-------------------调用父类的构造方法
+4.向上造型:
+  1)父类型的引用指向了子类的对象
+  2)能点出来什么，看引用的类型
+
+
+练习:-------------------oo.day04包中(至少写一次)
+1)完成Cell类，包含:
+  1.1)成员变量: row,col
+  1.2)构造方法: Cell(int row,int col){}
+  1.3)方法: String getCellInfo(){}
+2)完成Tetromino类，包含:
+  2.1)成员变量: cells
+  2.2)构造方法: Tetromino(){}
+  2.3)方法: drop(),moveLeft(),moveRight(),print()
+3)完成T类，继承Tetromino，包含:
+  3.1)构造方法: T(int row,int col){}
+4)完成J类，继承Tetromino，包含:
+  4.1)构造方法: J(int row,int col){}
+5)完成TJTest类，包含:
+  5.1)main()中: 创建图形对象，调用printWall()测试
+  5.2)printWall(Tetromino t){}----打墙+打图形
+
+
+int[] arr = new int[3];
+arr[0] = 100;
+
+Cell[] cells = new Cell[4];
+cells[0] = new Cell(2,5);
+
+int[][] ar = new int[3][];
+ar[1] = new int[2];
+
+
+//向上造型
+Tetromino o1 = new T();
+Tetromino o2 = new J();
+Tetromino o3 = new L();
+Tetromino o4 = new O();
+Tetromino o5 = new I();
+Tetromino o6 = new S();
+Tetromino o7 = new Z();
+
+
+Person p1 = new Student();
+Person p2 = new Teacher();
+Person p3 = new Doctor();
+
+Animal o1 = new Tiger();
+Animal o2 = new Dog();
+Animal o3 = new Cat();
+
+
+
+//动物是动物
+Animal o1 = new Animal();
+//老虎是老虎
+Tiger o2 = new Tiger();
+//老虎是动物
+Animal o3 = new Tiger();
+
+//动物是老虎-----语义不通
+Tiger o4 = new Animal(); //编译错误
+
+
+
+class Animal{
+}
+class Tiger extends Animal{
+}
+
+
+
+
+继承要符合is a的关系
+
+
+为何要重载?
+  T型参数只能接收T型对象
+  J型参数只能接收J型对象
+  L型参数只能接收L型对象
+  O型参数只能接收O型对象
+  I型参数只能接收I型对象
+  S型参数只能接收S型对象
+  Z型参数只能接收Z型对象
+
+假设有一种类型Tetromino
+    既能接收T型对象，
+	也能接收J型对象，
+	也能接收L型对象，
+	也能接收O型对象，
+	也能接收I型对象，
+	也能接收S型对象，
+	也能接收Z型对象
+
+
+
+
+
+
+何时打*:只要行列匹配上就打*
+何时打-:4个格子都没匹配上则打-
+
+
+多次判断得到最终结果--------------------开关
+
+
+
+
+public static void printWall(T t){
+	for(int i=0;i<20;i++){
+		for(int j=0;j<10;j++){
+		    //效率高、扩展性差
+			if(i==t.cells[0].row && j==t.cells[0].col
+			   ||
+			   i==t.cells[1].row && j==t.cells[1].col
+			   ||
+			   i==t.cells[2].row && j==t.cells[2].col
+			   ||
+			   i==t.cells[3].row && j==t.cells[3].col){
+				System.out.print("* ");
+			}else{
+				System.out.print("- ");
+			}
+		}
+		System.out.println();
+	}
+}
+
+
+
+
+Coo o = new Coo();
+o.c = 1;
+o.b = 2;
+o.a = 3;
+
+class Aoo{
+  int a;
+}
+class Boo extends Aoo{
+  int b;
+}
+class Coo extends Boo{
+  int c;
+}
+
+
+
+Tetromino
+
+
+
+class Person{ //父类
+  String name;
+  int age;
+  String address;
+  void eat(){}
+  void sleep(){}
+}
+class Student extends Person{ //子类
+  String className;
+  void study(){}
+}
+class Teacher extends Person{ //子类
+  double salary;
+  void teach(){}
+}
+class Doctor extends Person{ //子类
+  String level;
+  void cut(){}
+}
+
+
+
+
+
+Student zs = new Student();
+zs.className/study();
+zs.name/age/address/eat()/sleep();
+
+Teacher ls = new Teacher();
+ls.salary/teach();
+ls.name/age/address/eat()/sleep();
+
+
+
+
+
+程序中的继承:
+    代码不用自己写，自己也能用
+
+生活中的继承:
+1)继承财产:
+    钱不用自己挣，自己也能花
+2)继承皇位:
+    江山不用自己打，自己也能坐
+3)继承工作:
+    工作不用自己找，自己也能干
+
+
+
+1)找对象:一堆T,J,L,O,I,S,Z的对象
+2)抽类:T,J,L,O,I,S,Z类
+3)设计类中的成员变量和方法:
+4)创建对象并测试:
+
+
+T t1 = new T(); //00,01,02,11
+T t2 = new T(); //00,01,02,11
+T t3 = new T(); //00,01,02,11
+
+T t1 = new T(2,5); //25,26,27,36
+T t2 = new T(1,6); //16,17,18,27
+T t3 = new T(4,3); //43,44,45,54
+T t4 = new T();    //00,01,02,11
+T t5 = new T(0,0); //00,01,02,11
+
+class T{
+  Cell[] cells;
+  T(){
+    this(0,0);
+  }
+  T(int row,int col){
+    cells = new Cell[4];
+    cells[0] = new Cell(row,col);
+	cells[1] = new Cell(row,col+1);
+	cells[2] = new Cell(row,col+2);
+	cells[3] = new Cell(row+1,col+1);
+  }
+
+  void drop(){
+	for(int i=0;i<cells.length;i++){
+	  cells[i].row++;
+	}
+  }
+  void moveLeft(){
+    for(int i=0;i<cells.length;i++){
+      cells[i].col--;
+	}
+  }
+  void moveRight(){
+    for(int i=0;i<cells.length;i++){
+      cells[i].col++;
+	}
+  }
+  void print(){
+    for(int i=0;i<cells.length;i++){
+	  String str = cells[i].getCellInfo();
+	  System.out.println(str);
+	}
+  }
+}
+
+
+TJTest
+
+
+
+
+
+
+class J{
+  Cell[] cells;
+  J(){
+    this(0,0);
+  }
+  J(int row,int col){
+    cells = new Cell[4];
+	cells[0] = new Cell(row,col);
+	cells[1] = new Cell(row+1,col);
+	cells[2] = new Cell(row+2,col-1);
+	cells[3] = new Cell(row+2,col);
+  }
+  void drop(){
+	for(int i=0;i<cells.length;i++){
+	  cells[i].row++;
+	}
+  }
+  void moveLeft(){
+    for(int i=0;i<cells.length;i++){
+      cells[i].col--;
+	}
+  }
+  void moveRight(){
+    for(int i=0;i<cells.length;i++){
+      cells[i].col++;
+	}
+  }
+  void print(){
+    for(int i=0;i<cells.length;i++){
+	  String str = cells[i].getCellInfo();
+	  System.out.println(str);
+	}
+  }
+}
+
+
+
+
+
+
+class 我{
+  我的姓名，我的年龄，我的地址，我的工资，
+  老公
+}
+
+class 老公{
+  姓名，年龄，工资...
+}
+
+
+
+
+class J{
+}
+class L{
+}
+class O{
+}
+class I{
+}
+class S{
+}
+class Z{
+}
+
+
+
+
+
+3:为arr的长度
+4:为arr中每个元素的长度
+
+int[][] arr = new int[3][4]; //3行4列
+for(int i=0;i<arr.length;i++){
+  for(int j=0;j<arr[i].length;j++){
+    arr[i][j] = 100;
+  }
+}
+
+
+
+i=0
+  j=0 arr00=100
+  j=1 arr01=100
+  j=2 arr02=100
+  j=3 arr03=100
+i=1
+  j=0 arr10=100
+  j=1 arr11=100
+  j=2 arr12=100
+  j=3 arr13=100
+
+
+
+
+int[][] arr = new int[3][];
+arr[0] = new int[2];
+arr[1] = new int[3];
+arr[2] = new int[2];
+//给arr中第2个元素中的第1个元素赋值为100
+arr[1][0] = 100;
+
+
+arr----------------------int[][]
+arr[0]-------------------int[]
+arr[0][0]----------------int
+
+
+//声明int[]型数组arr，包含3个元素
+//每个元素都是int[]型，默认值为null
+int[][] arr = new int[3][];
+
+
+
+
+
+//声明double[]型数组d，包含10个元素
+//每个元素都是double[]型，默认值为null
+double[][] d = new double[10][];
+
+
+
+
+
+int   [] arr   = new int[3];
+Cell  [] cells = new Cell[3];
+int[] [] arr   = new int[3][];
+
+
+
+
+int[] arr = new int[]{
+  2,
+  5,
+  7
+};
+
+Cell[] cells = new Cell[]{
+  new Cell(2,5),
+  new Cell(2,6),
+  new Cell(2,7),
+  new Cell(3,6)
+};
+
+
+
+int[] arr = new int[4];
+arr[0] = 100;
+
+Cell[] cells = new Cell[4]; //创建Cell数组对象
+cells[0] = new Cell(2,5);   //创建Cell对象
+cells[1] = new Cell(2,6);
+cells[2] = new Cell(2,7);
+cells[3] = new Cell(3,6);
+
+
+
+//声明整型数组arr，包含4个元素
+//每个元素都是int类型，默认值为0
+int[] arr   = new int[4];
+
+
+//声明Cell型数组cells，包含4个元素
+//每个元素都是Cell型，默认值为null
+Cell[] cells = new Cell[4];
+
+
+
+//声明Student型数组stus，包含26个元素
+//每个元素都是Student型，默认值为null
+Student[] stus = new Student[26];
